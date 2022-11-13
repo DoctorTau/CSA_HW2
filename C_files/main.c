@@ -23,13 +23,17 @@ int main(int argc, char* argv[]) {
 
     char result = IsPolidrom(str, len);
     if (result) {
-        printf("String %s is polidrom\n", str);
+        printf("YES\n", str);
     } else {
-        printf("String %s is not polidrom\n", str);
+        printf("NO\n", str);
     }
 
     if (argc == 3) {
-        WriteToFile(str, argv[1]);
+        if (result) {
+            WriteToFile("YES", argv[2]);
+        } else {
+            WriteToFile("NO", argv[2]);
+        }
     } else {
         printf("%s", str);
     }
