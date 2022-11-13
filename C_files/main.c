@@ -13,34 +13,55 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
 
     char str[MAX_SIZE];
-    int len;
+    clock_t t;
+    int len, amount_of_tests = 1;
+    char *inputFile = NULL, *outputFile = NULL;
 
-    if (argc == 1) {
-        len = rand() % 100 + 1;
-        GenerateRandomString(str, len);
-    } else {
+    switch (argc) {
+        case 3:
+            if (argv[1][0] == '-' && argv[1][1] == 'r') {
+                amount_of_tests = atoi(argv[2]);
+            } else {
+                inputFile = argv[1];
+                outputFile = argv[2];
+            }
+            break;
+        case 2:
+            inputFile = argv[1];
+            break;
+        case 1:
+            len = rand() % MAX_SIZE + 1;
+            GenerateRandomString(str, len);
+            break;
+
+        default:
+            break;
+    }
+
+    if (inputFile != NULL) {
         len = ReadFromFile(str, argv[1]);
     }
 
-    clock_t t;
     t = clock();
+    for (int i = 0; i < amount_of_tests; i++) {
+        IsPolidrom(str, len);
+    }
     char result = IsPolidrom(str, len);
     t = clock() - t;
     long int time_taken = ((long int)t) * 1000000 / CLOCKS_PER_SEC;
 
-    if (argc == 3) {
+    if (outputFile != NULL) {
         if (result) {
-            WriteToFile("YES\n", argv[2]);
+            WriteToFile("YES\n", outputFile);
         } else {
-            WriteToFile("NO\n", argv[2]);
+            WriteToFile("NO\n", outputFile);
         }
     } else {
         if (result) {
-            printf("YES\n %s", str);
+            printf("YES\n");
         } else {
-            printf("NO\n %s", str);
+            printf("NO\n");
         }
-        printf("%s", str);
     }
 
     printf("\nProgram took %ld miliseconds to execute \n", time_taken);

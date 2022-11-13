@@ -14,13 +14,11 @@ MAX_SIZE:
 .LC1:
 	.string	"NO\n"
 .LC2:
-	.string	"YES\n %s"
+	.string	"YES"
 .LC3:
-	.string	"NO\n %s"
-.LC4:
-	.string	"%s"
+	.string	"NO"
 	.align 8
-.LC5:
+.LC4:
 	.string	"\nProgram took %ld miliseconds to execute \n"
 	.text
 	.globl	main
@@ -34,9 +32,9 @@ main:
 	push	r13
 	push	r12
 	push	rbx
-	sub	rsp, 72
-	mov	DWORD PTR -100[rbp], edi
-	mov	QWORD PTR -112[rbp], rsi
+	sub	rsp, 104
+	mov	DWORD PTR -132[rbp], edi
+	mov	QWORD PTR -144[rbp], rsi
 	mov	rax, rsp
 	mov	rbx, rax
 	mov	edi, 0
@@ -46,7 +44,7 @@ main:
 	mov	eax, DWORD PTR MAX_SIZE[rip]
 	movsx	rdx, eax
 	sub	rdx, 1
-	mov	QWORD PTR -64[rbp], rdx
+	mov	QWORD PTR -88[rbp], rdx
 	movsx	rdx, eax
 	mov	r14, rdx
 	mov	r15d, 0
@@ -57,9 +55,9 @@ main:
 	mov	edx, 16
 	sub	rdx, 1
 	add	rax, rdx
-	mov	esi, 16
+	mov	ecx, 16
 	mov	edx, 0
-	div	rsi
+	div	rcx
 	imul	rax, rax, 16
 	mov	rdx, rax
 	and	rdx, -4096
@@ -87,96 +85,136 @@ main:
 .L4:
 	mov	rax, rsp
 	add	rax, 0
+	mov	QWORD PTR -96[rbp], rax
+	mov	DWORD PTR -60[rbp], 1
+	mov	QWORD PTR -56[rbp], 0
+	mov	QWORD PTR -72[rbp], 0
+	cmp	DWORD PTR -132[rbp], 3
+	je	.L5
+	cmp	DWORD PTR -132[rbp], 3
+	jg	.L20
+	cmp	DWORD PTR -132[rbp], 1
+	je	.L7
+	cmp	DWORD PTR -132[rbp], 2
+	je	.L8
+	jmp	.L20
+.L5:
+	mov	rax, QWORD PTR -144[rbp]
+	add	rax, 8
+	mov	rax, QWORD PTR [rax]
+	movzx	eax, BYTE PTR [rax]
+	cmp	al, 45
+	jne	.L9
+	mov	rax, QWORD PTR -144[rbp]
+	add	rax, 8
+	mov	rax, QWORD PTR [rax]
+	add	rax, 1
+	movzx	eax, BYTE PTR [rax]
+	cmp	al, 114
+	jne	.L9
+	mov	rax, QWORD PTR -144[rbp]
+	add	rax, 16
+	mov	rax, QWORD PTR [rax]
+	mov	rdi, rax
+	call	atoi@PLT
+	mov	DWORD PTR -60[rbp], eax
+	nop
+	jmp	.L11
+.L9:
+	mov	rax, QWORD PTR -144[rbp]
+	mov	rax, QWORD PTR 8[rax]
+	mov	QWORD PTR -56[rbp], rax
+	mov	rax, QWORD PTR -144[rbp]
+	mov	rax, QWORD PTR 16[rax]
 	mov	QWORD PTR -72[rbp], rax
-	cmp	DWORD PTR -100[rbp], 1
-	jne	.L5
+	jmp	.L11
+.L8:
+	mov	rax, QWORD PTR -144[rbp]
+	mov	rax, QWORD PTR 8[rax]
+	mov	QWORD PTR -56[rbp], rax
+	jmp	.L11
+.L7:
 	call	rand@PLT
-	movsx	rdx, eax
-	imul	rdx, rdx, 1374389535
-	shr	rdx, 32
-	mov	ecx, edx
-	sar	ecx, 5
+	mov	ecx, DWORD PTR MAX_SIZE[rip]
 	cdq
-	sub	ecx, edx
-	mov	edx, ecx
-	imul	edx, edx, 100
-	sub	eax, edx
-	mov	edx, eax
-	lea	eax, 1[rdx]
-	mov	DWORD PTR -52[rbp], eax
-	mov	edx, DWORD PTR -52[rbp]
-	mov	rax, QWORD PTR -72[rbp]
+	idiv	ecx
+	mov	eax, edx
+	add	eax, 1
+	mov	DWORD PTR -64[rbp], eax
+	mov	edx, DWORD PTR -64[rbp]
+	mov	rax, QWORD PTR -96[rbp]
 	mov	esi, edx
 	mov	rdi, rax
 	call	GenerateRandomString@PLT
-	jmp	.L6
-.L5:
-	mov	rax, QWORD PTR -112[rbp]
+	jmp	.L11
+.L20:
+	nop
+.L11:
+	cmp	QWORD PTR -56[rbp], 0
+	je	.L12
+	mov	rax, QWORD PTR -144[rbp]
 	add	rax, 8
 	mov	rdx, QWORD PTR [rax]
-	mov	rax, QWORD PTR -72[rbp]
+	mov	rax, QWORD PTR -96[rbp]
 	mov	rsi, rdx
 	mov	rdi, rax
 	call	ReadFromFile@PLT
-	mov	DWORD PTR -52[rbp], eax
-.L6:
+	mov	DWORD PTR -64[rbp], eax
+.L12:
 	call	clock@PLT
-	mov	QWORD PTR -80[rbp], rax
-	mov	edx, DWORD PTR -52[rbp]
-	mov	rax, QWORD PTR -72[rbp]
+	mov	QWORD PTR -104[rbp], rax
+	mov	DWORD PTR -76[rbp], 0
+	jmp	.L13
+.L14:
+	mov	edx, DWORD PTR -64[rbp]
+	mov	rax, QWORD PTR -96[rbp]
 	mov	esi, edx
 	mov	rdi, rax
 	call	IsPolidrom@PLT
-	mov	BYTE PTR -81[rbp], al
+	add	DWORD PTR -76[rbp], 1
+.L13:
+	mov	eax, DWORD PTR -76[rbp]
+	cmp	eax, DWORD PTR -60[rbp]
+	jl	.L14
+	mov	edx, DWORD PTR -64[rbp]
+	mov	rax, QWORD PTR -96[rbp]
+	mov	esi, edx
+	mov	rdi, rax
+	call	IsPolidrom@PLT
+	mov	BYTE PTR -105[rbp], al
 	call	clock@PLT
-	sub	rax, QWORD PTR -80[rbp]
-	mov	QWORD PTR -80[rbp], rax
-	mov	rax, QWORD PTR -80[rbp]
-	mov	QWORD PTR -96[rbp], rax
-	cmp	DWORD PTR -100[rbp], 3
-	jne	.L7
-	cmp	BYTE PTR -81[rbp], 0
-	je	.L8
-	mov	rax, QWORD PTR -112[rbp]
-	add	rax, 16
-	mov	rax, QWORD PTR [rax]
+	sub	rax, QWORD PTR -104[rbp]
+	mov	QWORD PTR -104[rbp], rax
+	mov	rax, QWORD PTR -104[rbp]
+	mov	QWORD PTR -120[rbp], rax
+	cmp	QWORD PTR -72[rbp], 0
+	je	.L15
+	cmp	BYTE PTR -105[rbp], 0
+	je	.L16
+	mov	rax, QWORD PTR -72[rbp]
 	mov	rsi, rax
 	lea	rdi, .LC0[rip]
 	call	WriteToFile@PLT
-	jmp	.L9
-.L8:
-	mov	rax, QWORD PTR -112[rbp]
-	add	rax, 16
-	mov	rax, QWORD PTR [rax]
+	jmp	.L17
+.L16:
+	mov	rax, QWORD PTR -72[rbp]
 	mov	rsi, rax
 	lea	rdi, .LC1[rip]
 	call	WriteToFile@PLT
-	jmp	.L9
-.L7:
-	cmp	BYTE PTR -81[rbp], 0
-	je	.L10
-	mov	rax, QWORD PTR -72[rbp]
-	mov	rsi, rax
+	jmp	.L17
+.L15:
+	cmp	BYTE PTR -105[rbp], 0
+	je	.L18
 	lea	rdi, .LC2[rip]
-	mov	eax, 0
-	call	printf@PLT
-	jmp	.L11
-.L10:
-	mov	rax, QWORD PTR -72[rbp]
-	mov	rsi, rax
+	call	puts@PLT
+	jmp	.L17
+.L18:
 	lea	rdi, .LC3[rip]
-	mov	eax, 0
-	call	printf@PLT
-.L11:
-	mov	rax, QWORD PTR -72[rbp]
+	call	puts@PLT
+.L17:
+	mov	rax, QWORD PTR -120[rbp]
 	mov	rsi, rax
 	lea	rdi, .LC4[rip]
-	mov	eax, 0
-	call	printf@PLT
-.L9:
-	mov	rax, QWORD PTR -96[rbp]
-	mov	rsi, rax
-	lea	rdi, .LC5[rip]
 	mov	eax, 0
 	call	printf@PLT
 	mov	eax, 0
