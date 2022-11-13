@@ -19,6 +19,9 @@ MAX_SIZE:
 	.string	"NO\n %s"
 .LC4:
 	.string	"%s"
+	.align 8
+.LC5:
+	.string	"\nProgram took %ld miliseconds to execute \n"
 	.text
 	.globl	main
 	.type	main, @function
@@ -31,9 +34,9 @@ main:
 	push	r13
 	push	r12
 	push	rbx
-	sub	rsp, 56
-	mov	DWORD PTR -84[rbp], edi
-	mov	QWORD PTR -96[rbp], rsi
+	sub	rsp, 72
+	mov	DWORD PTR -100[rbp], edi
+	mov	QWORD PTR -112[rbp], rsi
 	mov	rax, rsp
 	mov	rbx, rax
 	mov	edi, 0
@@ -85,7 +88,7 @@ main:
 	mov	rax, rsp
 	add	rax, 0
 	mov	QWORD PTR -72[rbp], rax
-	cmp	DWORD PTR -84[rbp], 1
+	cmp	DWORD PTR -100[rbp], 1
 	jne	.L5
 	call	rand@PLT
 	movsx	rdx, eax
@@ -108,7 +111,7 @@ main:
 	call	GenerateRandomString@PLT
 	jmp	.L6
 .L5:
-	mov	rax, QWORD PTR -96[rbp]
+	mov	rax, QWORD PTR -112[rbp]
 	add	rax, 8
 	mov	rdx, QWORD PTR [rax]
 	mov	rax, QWORD PTR -72[rbp]
@@ -117,17 +120,24 @@ main:
 	call	ReadFromFile@PLT
 	mov	DWORD PTR -52[rbp], eax
 .L6:
+	call	clock@PLT
+	mov	QWORD PTR -80[rbp], rax
 	mov	edx, DWORD PTR -52[rbp]
 	mov	rax, QWORD PTR -72[rbp]
 	mov	esi, edx
 	mov	rdi, rax
 	call	IsPolidrom@PLT
-	mov	BYTE PTR -73[rbp], al
-	cmp	DWORD PTR -84[rbp], 3
+	mov	BYTE PTR -81[rbp], al
+	call	clock@PLT
+	sub	rax, QWORD PTR -80[rbp]
+	mov	QWORD PTR -80[rbp], rax
+	mov	rax, QWORD PTR -80[rbp]
+	mov	QWORD PTR -96[rbp], rax
+	cmp	DWORD PTR -100[rbp], 3
 	jne	.L7
-	cmp	BYTE PTR -73[rbp], 0
+	cmp	BYTE PTR -81[rbp], 0
 	je	.L8
-	mov	rax, QWORD PTR -96[rbp]
+	mov	rax, QWORD PTR -112[rbp]
 	add	rax, 16
 	mov	rax, QWORD PTR [rax]
 	mov	rsi, rax
@@ -135,7 +145,7 @@ main:
 	call	WriteToFile@PLT
 	jmp	.L9
 .L8:
-	mov	rax, QWORD PTR -96[rbp]
+	mov	rax, QWORD PTR -112[rbp]
 	add	rax, 16
 	mov	rax, QWORD PTR [rax]
 	mov	rsi, rax
@@ -143,7 +153,7 @@ main:
 	call	WriteToFile@PLT
 	jmp	.L9
 .L7:
-	cmp	BYTE PTR -73[rbp], 0
+	cmp	BYTE PTR -81[rbp], 0
 	je	.L10
 	mov	rax, QWORD PTR -72[rbp]
 	mov	rsi, rax
@@ -164,6 +174,11 @@ main:
 	mov	eax, 0
 	call	printf@PLT
 .L9:
+	mov	rax, QWORD PTR -96[rbp]
+	mov	rsi, rax
+	lea	rdi, .LC5[rip]
+	mov	eax, 0
+	call	printf@PLT
 	mov	eax, 0
 	mov	rsp, rbx
 	lea	rsp, -40[rbp]

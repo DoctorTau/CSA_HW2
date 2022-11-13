@@ -11,6 +11,7 @@ extern void WriteToFile(char* str, char* filename);
 
 int main(int argc, char* argv[]) {
     srand(time(NULL));
+
     char str[MAX_SIZE];
     int len;
 
@@ -21,7 +22,11 @@ int main(int argc, char* argv[]) {
         len = ReadFromFile(str, argv[1]);
     }
 
+    clock_t t;
+    t = clock();
     char result = IsPolidrom(str, len);
+    t = clock() - t;
+    long int time_taken = ((long int)t) * 1000000 / CLOCKS_PER_SEC;
 
     if (argc == 3) {
         if (result) {
@@ -38,5 +43,6 @@ int main(int argc, char* argv[]) {
         printf("%s", str);
     }
 
+    printf("\nProgram took %ld miliseconds to execute \n", time_taken);
     return 0;
 }
