@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 
 void WriteToFile(char* str, char* filename) {

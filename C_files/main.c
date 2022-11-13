@@ -22,19 +22,19 @@ int main(int argc, char* argv[]) {
     }
 
     char result = IsPolidrom(str, len);
-    if (result) {
-        printf("YES\n", str);
-    } else {
-        printf("NO\n", str);
-    }
 
     if (argc == 3) {
         if (result) {
-            WriteToFile("YES", argv[2]);
+            WriteToFile("YES\n", argv[2]);
         } else {
-            WriteToFile("NO", argv[2]);
+            WriteToFile("NO\n", argv[2]);
         }
     } else {
+        if (result) {
+            printf("YES\n %s", str);
+        } else {
+            printf("NO\n %s", str);
+        }
         printf("%s", str);
     }
 

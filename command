@@ -1,0 +1,1 @@
+gcc -masm=intel     -fno-asynchronous-unwind-tables     -fno-jump-tables     -fno-stack-protector     -fno-exceptions     ./C_files/randomGenerator.c     -S -o ./Assembler_files/randomGenerator.s
