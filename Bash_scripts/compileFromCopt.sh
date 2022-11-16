@@ -5,7 +5,7 @@ do
     filename=$(basename "$file")
     filename="${filename%.*}"
 
-    gcc -masm=intel -fno-asynchronous-unwind-tables -fno-jump-tables -fno-stack-protector -fno-exceptions ./C_files/$filename.c -S -o ./Assembler_files/$filename.s
+    gcc -masm=intel ./C_files/$filename.c -S -o ./Assembler_files/$filename.s
 done
 
 for file in ./Assembler_files/*.s
